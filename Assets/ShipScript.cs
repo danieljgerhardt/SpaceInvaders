@@ -4,10 +4,11 @@ using UnityEngine.InputSystem;
 public class ShipScript : MonoBehaviour
 {
 
-    public float speed = 5f;
+    public float speed = 8f;
     public float bulletSpeed = 10f;
     public int startingLives = 3;
     private int lives;
+    private int resources = 0;
     public GameObject bullet;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,6 +35,41 @@ public class ShipScript : MonoBehaviour
         }
     }
 
+    void UseUltimate()
+    {
+        if (resources >= 6)
+        {
+            resources -= 6;
+            lives += 1;
+            var gameManager = FindFirstObjectByType<GameManagerScript>();
+            if (gameManager != null)
+            {
+                gameManager.UpdateResources(-6);
+                gameManager.UpdateLives(lives); // Update lives display
+            }
+            // Fire 3 bullets in a spread pattern, offsetting their X position
+            float bulletSpacing = 0.5f; // Adjust as needed based on bullet size
+            for (int i = -1; i <= 1; i++)
+            {
+                if (bullet != null)
+                {
+                    Vector3 offset = new Vector3(i * bulletSpacing, 0.0f, 2.0f);
+                    GameObject newBullet = Instantiate(
+                        bullet,
+                        transform.position + offset,
+                        Quaternion.Euler(0, i * 15, 0) // Spread by 15 degrees
+                    );
+                    Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        Vector3 direction = Quaternion.Euler(0, i * 15, 0) * Vector3.forward;
+                        rb.linearVelocity = direction * bulletSpeed;
+                    }
+                }
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -47,9 +83,14 @@ public class ShipScript : MonoBehaviour
         Vector3 movement = new Vector3(move, 0, 0) * speed * Time.deltaTime;
         transform.Translate(movement);
 
-        if (Mouse.current.leftButton.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             FireBullet();
+        }
+
+        if (Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            UseUltimate();
         }
     }
 
@@ -59,12 +100,22 @@ public class ShipScript : MonoBehaviour
         var gameManager = FindFirstObjectByType<GameManagerScript>();
         if (gameManager != null)
         {
-            gameManager.LoseLife(lives);
+            gameManager.UpdateLives(lives);
         }
         if (lives <= 0)
         {
             // Destroy self
             Destroy(gameObject);
+        }
+    }
+
+    public void CollectResources(int amount)
+    {
+        resources += amount;
+        var gameManager = FindFirstObjectByType<GameManagerScript>();
+        if (gameManager != null)
+        {
+            gameManager.UpdateResources(amount);
         }
     }
 }

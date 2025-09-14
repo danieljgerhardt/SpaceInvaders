@@ -8,13 +8,17 @@ public class BulletScript : MonoBehaviour
     public AudioClip alienDeathSound;
     public AudioClip playerHitSound;
     public AudioClip shieldHitSound;
+
+    private bool hasCollided = false;
     void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);           // Destroy the bullet
+        if (hasCollided) return;
 
         if (collision.gameObject.CompareTag("Alien"))
         {
-            Destroy(collision.gameObject); // Destroy the alien
+            var alienScript = collision.gameObject.GetComponent<AlienScript>();
+            alienScript.setHit();
+
             var gameManagerScript = FindFirstObjectByType<GameManagerScript>(); 
             if (gameManagerScript != null)
             {
@@ -38,6 +42,8 @@ public class BulletScript : MonoBehaviour
             Destroy(collision.gameObject); // Destroy the shield
             AudioSource.PlayClipAtPoint(shieldHitSound, transform.position);
         }
+
+        hasCollided = true;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,8 +53,13 @@ public class BulletScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (hasCollided && rb != null)
+        {
+            //rb.linearVelocity += new Vector3(0, 0, -9.68f * Time.fixedDeltaTime);
+            rb.AddForce(new Vector3(0, 0, -9.68f), ForceMode.Acceleration);
+        }
     }
 }

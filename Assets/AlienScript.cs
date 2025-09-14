@@ -8,6 +8,7 @@ public class AlienScript : MonoBehaviour
     private float leftLimit;
     private float rightLimit;
     public int direction = 1;         // 1 = right, -1 = left
+    private bool isHit = false;
 
     void Start()
     {
@@ -17,10 +18,22 @@ public class AlienScript : MonoBehaviour
         rightLimit = startX + moveDistance;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        // Move horizontally
-        transform.Translate(Vector3.right * direction * speed * Time.deltaTime);
+        if (isHit)
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                //rb.linearVelocity += new Vector3(0, 0, -9.68f * Time.fixedDeltaTime);
+
+                rb.AddForce(new Vector3(0, 0, -9.68f), ForceMode.Acceleration);
+            }
+        }
+        else
+        {
+            transform.Translate(Vector3.right * direction * speed * Time.deltaTime);
+        }
     }
     public void Shoot(GameObject bulletPrefab)
     {
@@ -38,4 +51,22 @@ public class AlienScript : MonoBehaviour
             }
         }
     }
+
+    public void setHit()
+    {
+        isHit = true;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.rotation = Quaternion.identity;
+            rb.useGravity = false;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+            rb.AddForce(new Vector3(0, 0, -9.68f), ForceMode.Acceleration);
+        }
+    }
+
+    public bool getIsHit() { return isHit; }
 }

@@ -5,16 +5,24 @@ public class GameManagerScript : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text livesText;
     public TMP_Text winStatusText;
+    public TMP_Text resourcesText;
 
     public float scorePerAlien = 10f;
     private float score = 0f;
+    private int resources = 0;
     public void IncreaseScore()
     {
         score += scorePerAlien;
         scoreText.text = "Score: " + score;
     }
 
-    public void LoseLife(int lives)
+    public void UpdateResources(int amount)
+    {
+        resources += amount;
+        resourcesText.text = "Resources Collected: " + resources;
+    }
+
+    public void UpdateLives(int lives)
     {
         if (lives <= 0)
         {

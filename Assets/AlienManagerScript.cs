@@ -6,6 +6,8 @@ public class AlienManagerScript : MonoBehaviour
     public GameObject bulletPrefab;
     private float shootTimer = 0f;
 
+    public float speedIncreaseOnDrop = 0.15f;
+
     public float forwardStep = 0.5f;
     public float lossZ = -8.3f; // Z position at which player loses
     
@@ -56,6 +58,7 @@ public class AlienManagerScript : MonoBehaviour
         bool hitBoundary = false;
         foreach (AlienScript alien in FindObjectsByType<AlienScript>(0))
         {
+            if (alien.getIsHit()) continue; // Ignore hit aliens
             if ((direction == 1 && alien.transform.position.x >= rightLimit) ||
                 (direction == -1 && alien.transform.position.x <= leftLimit))
             {
@@ -68,18 +71,11 @@ public class AlienManagerScript : MonoBehaviour
         if (hitBoundary) {
             foreach (AlienScript alien in FindObjectsByType<AlienScript>(0))
             {
+                if (alien.getIsHit()) continue; // Ignore hit aliens
                 alien.transform.position += new Vector3(0, 0, -forwardStep);
                 alien.direction *= -1;
 
-                // Check if any alien has reached the loss Z position
-                if (alien.transform.position.z <= lossZ)
-                {
-                    var gameManager = FindFirstObjectByType<GameManagerScript>();
-                    if (gameManager != null)
-                    {
-                        gameManager.SetWinStatusToLose();
-                    }
-                }
+                alien.speed += speedIncreaseOnDrop;
             }
         }
 
@@ -96,6 +92,7 @@ public class AlienManagerScript : MonoBehaviour
         Dictionary<float, AlienScript> lowestAliens = new Dictionary<float, AlienScript>();
         foreach (AlienScript alien in FindObjectsByType<AlienScript>(0))
         {
+            if (alien.getIsHit()) continue; // Ignore hit aliens
             float x = Mathf.Round(alien.transform.position.x * 10f) / 10f; // Tolerance for float
             if (!lowestAliens.ContainsKey(x) || alien.transform.position.z < lowestAliens[x].transform.position.z)
             {

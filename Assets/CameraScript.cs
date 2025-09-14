@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 public class CameraScript : MonoBehaviour
 {
     public bool firstPersonView = false; // Toggle in Inspector or via code
@@ -20,6 +21,12 @@ public class CameraScript : MonoBehaviour
 
     void Update()
     {
+        // Toggle first person view on F key press
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            firstPersonView = !firstPersonView;
+        }
+
         if (firstPersonView && shipTransform != null)
         {
             // Set camera to ship's position + offset, and match rotation
