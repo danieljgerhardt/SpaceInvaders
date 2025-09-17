@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7649163092968025938}
   - component: {fileID: 6423706864662000307}
   - component: {fileID: 2402662609612327470}
-  - component: {fileID: 1505475626788667678}
   - component: {fileID: -3492912936406740478}
+  - component: {fileID: 7212120255702971763}
   m_Layer: 0
   m_Name: Alien
   m_TagString: Alien
@@ -113,7 +113,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &1505475626788667678
+--- !u!114 &-3492912936406740478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5696577928013626436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99af21f2c1f915747b4dcd213124c52d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlienScript
+  speed: 2
+  moveDistance: 3
+  alienDeathParticlesPrefab: {fileID: 8935983568044710969, guid: 0cb7f3044f7f652468f1a46bbf09cbca, type: 3}
+  direction: 1
+--- !u!54 &7212120255702971763
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +137,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5696577928013626436}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -140,19 +156,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &-3492912936406740478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5696577928013626436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99af21f2c1f915747b4dcd213124c52d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AlienScript
-  speed: 2
-  moveDistance: 3
-  alienDeathParticlesPrefab: {fileID: 8935983568044710969, guid: 0cb7f3044f7f652468f1a46bbf09cbca, type: 3}
-  direction: 1

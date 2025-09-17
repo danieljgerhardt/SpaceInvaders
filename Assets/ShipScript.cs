@@ -7,8 +7,9 @@ public class ShipScript : MonoBehaviour
     public float speed = 8f;
     public float bulletSpeed = 10f;
     public int startingLives = 3;
+    public int startingResources = 65;
     private int lives;
-    private int resources = 30;
+    private int resources;
     public GameObject bullet;
     public AudioClip ultimateSound;
 
@@ -18,6 +19,7 @@ public class ShipScript : MonoBehaviour
     void Start()
     {
         lives = startingLives;
+        resources = startingResources;
         rb = GetComponent<Rigidbody>();
         var gameManager = FindFirstObjectByType<GameManagerScript>();
         if (gameManager != null)

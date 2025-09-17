@@ -23,6 +23,8 @@ public class AlienManagerScript : MonoBehaviour
     private float ufoSpawnTimer = 0f;
     private float nextUFOSpawnTime = 0f;
 
+    private float direction;
+
     private void Start()
     {
         float leftMostAlien = float.MaxValue;
@@ -32,36 +34,40 @@ public class AlienManagerScript : MonoBehaviour
             if (alien.transform.position.x < leftMostAlien)
             {
                 leftMostAlien = alien.transform.position.x;
-                leftLimit = leftMostAlien - alien.moveDistance * 0.99f;
+                leftLimit = leftMostAlien - alien.moveDistance * 0.95f;
             }
             if (alien.transform.position.x > rightMostAlien)
             {
                 rightMostAlien = alien.transform.position.x;
-                rightLimit = alien.transform.position.x + alien.moveDistance * 0.99f;
+                rightLimit = alien.transform.position.x + alien.moveDistance * 0.95f;
             }
         }
+
         // Set initial UFO spawn time
         nextUFOSpawnTime = Random.Range(minUFOSpawnInterval, maxUFOSpawnInterval);
+
+        direction = 1;
     }
 
     void Update()
     {
-        int direction = 0;
-        // If no aliens exist, win the game
-        if (FindObjectsByType<AlienScript>(0).Length == 0)
+        // If all aliens hit, win the game
+        AlienScript[] aliens = FindObjectsByType<AlienScript>(0);
+        bool allHit = aliens.Length > 0;
+        foreach (AlienScript alien in aliens)
+        {
+            if (!alien.getIsHit())
+            {
+                allHit = false;
+                break;
+            }
+        }
+        if (allHit)
         {
             var gameManager = FindFirstObjectByType<GameManagerScript>();
             if (gameManager != null)
             {
                 gameManager.SetWinStatusToWin();
-            }
-        } else
-        {
-            // Get direction of first alien
-            AlienScript firstAlien = FindFirstObjectByType<AlienScript>();
-            if (firstAlien != null)
-            {
-                direction = firstAlien.direction;
             }
         }
 
@@ -74,19 +80,34 @@ public class AlienManagerScript : MonoBehaviour
                 (direction == -1 && alien.transform.position.x <= leftLimit))
             {
                 hitBoundary = true;
+                direction *= -1;
                 break;
             }
         }
 
         // Move all aliens forward if boundary hit
-        if (hitBoundary) {
+        if (hitBoundary)
+        {
             foreach (AlienScript alien in FindObjectsByType<AlienScript>(0))
             {
                 if (alien.getIsHit()) continue; // Ignore hit aliens
                 alien.transform.position += new Vector3(0, 0, -forwardStep);
                 alien.direction *= -1;
-
                 alien.speed += speedIncreaseOnDrop;
+            }
+        }
+
+        foreach (AlienScript alien in FindObjectsByType<AlienScript>(0))
+        {
+            if (alien.getIsHit()) continue; // Ignore hit aliens
+            if (alien.transform.position.z <= lossZ)
+            {
+                var gameManager = FindFirstObjectByType<GameManagerScript>();
+                if (gameManager != null)
+                {
+                    gameManager.SetWinStatusToLose();
+                }
+                break; // Only need to trigger once
             }
         }
 
@@ -133,7 +154,7 @@ public class AlienManagerScript : MonoBehaviour
         foreach (AlienScript alien in FindObjectsByType<AlienScript>(0))
         {
             if (alien.getIsHit()) continue; // Ignore hit aliens
-            float x = Mathf.Round(alien.transform.position.x * 10f) / 10f; // Tolerance for float
+            float x = alien.transform.position.x;
             if (!lowestAliens.ContainsKey(x) || alien.transform.position.z < lowestAliens[x].transform.position.z)
             {
                 lowestAliens[x] = alien;

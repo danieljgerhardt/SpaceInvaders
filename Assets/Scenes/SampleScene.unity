@@ -3523,10 +3523,6 @@ PrefabInstance:
       propertyPath: speed
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1505475626788667678, guid: 321cd8529c7f941449de385dfca02711, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
     - target: {fileID: 4893290534974513413, guid: 321cd8529c7f941449de385dfca02711, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4
@@ -3862,8 +3858,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipScript
   speed: 5
-  bulletSpeed: 10
+  bulletSpeed: 14
   startingLives: 3
+  startingResources: 65
   bullet: {fileID: 956324774664460003, guid: f510f2be0cd1ead4da90ba1f2521e715, type: 3}
   ultimateSound: {fileID: 8300000, guid: a7821a9b3eb7c34469bd6ed9d023500d, type: 3}
 --- !u!1 &2043454889
@@ -4184,7 +4181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1705710681212860902, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
       propertyPath: minUFOSpawnInterval
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7157442304309998984, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4338,7 +4335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8992039954672673392, guid: 6b522a98969669d4286bb632ec351f0b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.19
+      value: -11.32
       objectReference: {fileID: 0}
     - target: {fileID: 8992039954672673392, guid: 6b522a98969669d4286bb632ec351f0b, type: 3}
       propertyPath: m_LocalRotation.w
