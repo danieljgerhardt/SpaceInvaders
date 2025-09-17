@@ -27,6 +27,28 @@ public class BulletScript : MonoBehaviour
             AudioSource.PlayClipAtPoint(alienDeathSound, transform.position);
         }
 
+        if (collision.gameObject.CompareTag("UFO"))
+        {
+            Destroy(collision.gameObject);
+
+            var gameManagerScript = FindFirstObjectByType<GameManagerScript>();
+            if (gameManagerScript != null)
+            {
+                gameManagerScript.IncreaseScore();
+                gameManagerScript.IncreaseScore();
+                gameManagerScript.IncreaseScore();
+            }
+
+            //get player and increase resources by 3
+            var ship = FindFirstObjectByType<ShipScript>();
+            if (ship != null)
+            {
+                ship.CollectResources(3);
+            }
+
+            AudioSource.PlayClipAtPoint(alienDeathSound, transform.position);
+        }
+
         if (collision.gameObject.CompareTag("Player"))
         {
             var shipScript = collision.gameObject.GetComponent<ShipScript>();

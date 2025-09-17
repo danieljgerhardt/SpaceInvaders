@@ -19,7 +19,7 @@ public class GameManagerScript : MonoBehaviour
     public void UpdateResources(int amount)
     {
         resources += amount;
-        resourcesText.text = "Resources Collected: " + resources;
+        resourcesText.text = "Resources: " + resources;
     }
 
     public void UpdateLives(int lives)

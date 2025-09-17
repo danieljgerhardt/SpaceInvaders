@@ -14,6 +14,15 @@ public class AlienManagerScript : MonoBehaviour
     private float leftLimit = -5f;
     private float rightLimit = 5f;
 
+    public float ultimateTimerDecreaseAmount = -0.1f;
+
+    // UFO spawning fields
+    public GameObject ufoPrefab;
+    public float minUFOSpawnInterval = 15f;
+    public float maxUFOSpawnInterval = 30f;
+    private float ufoSpawnTimer = 0f;
+    private float nextUFOSpawnTime = 0f;
+
     private void Start()
     {
         float leftMostAlien = float.MaxValue;
@@ -31,6 +40,8 @@ public class AlienManagerScript : MonoBehaviour
                 rightLimit = alien.transform.position.x + alien.moveDistance * 0.99f;
             }
         }
+        // Set initial UFO spawn time
+        nextUFOSpawnTime = Random.Range(minUFOSpawnInterval, maxUFOSpawnInterval);
     }
 
     void Update()
@@ -85,6 +96,35 @@ public class AlienManagerScript : MonoBehaviour
             shootTimer = 0f;
             ShootFromLowestAliens();
         }
+
+        // UFO spawn logic
+        ufoSpawnTimer += Time.deltaTime;
+        if (ufoPrefab != null && ufoSpawnTimer >= nextUFOSpawnTime)
+        {
+            SpawnUFO();
+            ufoSpawnTimer = 0f;
+            nextUFOSpawnTime = Random.Range(minUFOSpawnInterval, maxUFOSpawnInterval);
+        }
+    }
+    void SpawnUFO()
+    {
+        // Randomly choose left or right spawn
+        bool moveRight = Random.value > 0.5f;
+        float ufoLeft = leftLimit * 3.0f;
+        float ufoRight = rightLimit * 3.0f;
+        float spawnX = moveRight ? ufoLeft : ufoRight;
+        float spawnY = 0.5f; // Adjust as needed for your scene
+        float spawnZ = 11.4f;  // Adjust as needed for your scene
+        Vector3 spawnPos = new Vector3(spawnX, spawnY, spawnZ);
+        GameObject ufo = Instantiate(ufoPrefab, spawnPos, Quaternion.identity);
+        UFOScript ufoScript = ufo.GetComponent<UFOScript>();
+        if (ufoScript != null)
+        {
+            ufoScript.moveRight = moveRight;
+            // Optionally set limits if your UFO prefab doesn't have them set
+            ufoScript.leftLimit = ufoLeft;
+            ufoScript.rightLimit = ufoRight;
+        }
     }
     void ShootFromLowestAliens()
     {
@@ -109,5 +149,10 @@ public class AlienManagerScript : MonoBehaviour
             int idx = Random.Range(0, candidates.Count);
             candidates[idx].Shoot(bulletPrefab);
         }
+    }
+
+    public void LowerShootTimer()
+    {
+        shootInterval -= ultimateTimerDecreaseAmount;
     }
 }

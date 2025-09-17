@@ -3357,7 +3357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Resources Collected: 0'
+  m_text: 'Resources: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3865,6 +3865,7 @@ MonoBehaviour:
   bulletSpeed: 10
   startingLives: 3
   bullet: {fileID: 956324774664460003, guid: f510f2be0cd1ead4da90ba1f2521e715, type: 3}
+  ultimateSound: {fileID: 8300000, guid: a7821a9b3eb7c34469bd6ed9d023500d, type: 3}
 --- !u!1 &2043454889
 GameObject:
   m_ObjectHideFlags: 0
@@ -4166,6 +4167,10 @@ PrefabInstance:
       value: -21
       objectReference: {fileID: 0}
     - target: {fileID: 1705710681212860902, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
+      propertyPath: ufoPrefab
+      value: 
+      objectReference: {fileID: 8824121988405795202, guid: 05ea082be0195b843be10a8d53550ada, type: 3}
+    - target: {fileID: 1705710681212860902, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
       propertyPath: rightLimit
       value: 21
       objectReference: {fileID: 0}
@@ -4173,6 +4178,14 @@ PrefabInstance:
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 956324774664460003, guid: f510f2be0cd1ead4da90ba1f2521e715, type: 3}
+    - target: {fileID: 1705710681212860902, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
+      propertyPath: maxUFOSpawnInterval
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705710681212860902, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
+      propertyPath: minUFOSpawnInterval
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7157442304309998984, guid: 3703c89070ab99d41803b1e89e3bd557, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

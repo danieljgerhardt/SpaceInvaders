@@ -3,6 +3,7 @@ public class AlienScript : MonoBehaviour
 {
     public float speed = 2f;           // Movement speed
     public float moveDistance = 3f;    // How far from the start position to move left/right
+    public GameObject alienDeathParticlesPrefab;
 
     private float startX;
     private float leftLimit;
@@ -65,6 +66,11 @@ public class AlienScript : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
             rb.AddForce(new Vector3(0, 0, -9.68f), ForceMode.Acceleration);
+        }
+
+        if (alienDeathParticlesPrefab != null)
+        {
+            Instantiate(alienDeathParticlesPrefab, transform.position, Quaternion.identity);
         }
     }
 

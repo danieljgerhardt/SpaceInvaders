@@ -8,19 +8,34 @@ public class ShipScript : MonoBehaviour
     public float bulletSpeed = 10f;
     public int startingLives = 3;
     private int lives;
-    private int resources = 0;
+    private int resources = 30;
     public GameObject bullet;
+    public AudioClip ultimateSound;
+
+    private Rigidbody rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         lives = startingLives;
+        rb = GetComponent<Rigidbody>();
+        var gameManager = FindFirstObjectByType<GameManagerScript>();
+        if (gameManager != null)
+        {
+            gameManager.UpdateResources(resources);
+        }
     }
 
     void FireBullet()
     {
-        if (bullet != null)
+        if (bullet != null && resources > 0)
         {
+            resources--;
+            var gameManager = FindFirstObjectByType<GameManagerScript>();
+            if (gameManager != null)
+            {
+                gameManager.UpdateResources(-1);
+            }
             GameObject newBullet = Instantiate(
                 bullet,
                 transform.position + new Vector3(0.0f, 0.0f, 2.0f),
@@ -41,6 +56,7 @@ public class ShipScript : MonoBehaviour
         {
             resources -= 6;
             lives += 1;
+            AudioSource.PlayClipAtPoint(ultimateSound, transform.position);
             var gameManager = FindFirstObjectByType<GameManagerScript>();
             if (gameManager != null)
             {
@@ -67,6 +83,13 @@ public class ShipScript : MonoBehaviour
                     }
                 }
             }
+
+            //lower shoot interval in alien manager script
+            var alienManager = FindFirstObjectByType<AlienManagerScript>();
+            if (alienManager != null)
+            {
+                alienManager.LowerShootTimer();
+            }
         }
     }
 
@@ -80,8 +103,12 @@ public class ShipScript : MonoBehaviour
         if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
             move += 1f;
 
-        Vector3 movement = new Vector3(move, 0, 0) * speed * Time.deltaTime;
-        transform.Translate(movement);
+        //Vector3 movement = new Vector3(move, 0, 0) * speed * Time.deltaTime;
+        //transform.Translate(movement);
+        if (rb != null)
+        {
+            rb.linearVelocity = new Vector3(move * speed, 0, 0);
+        }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
